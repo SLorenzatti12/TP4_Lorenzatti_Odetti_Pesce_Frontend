@@ -5,26 +5,29 @@ import VistaSemanal from './Calendar/VistaSemanal';
 //import VistaDiaria from './Calendar/VistaDiaria';
 import '../estilos/Dashboard.css'; // Puedes crear este archivo para estilos personalizados
 
-const Dashboard = () => {
+
+function Dashboard() {
   return (
-    <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <NavLink to="year" className="nav-link">Año</NavLink>
-        <NavLink to="month" className="nav-link">Mes</NavLink>
-        <NavLink to="week" className="nav-link">Semana</NavLink>
-        {/* <NavLink to="day" className="nav-link">Día</NavLink> */}
+    <div className="dashboard">
+      <nav>
+        <ul>
+          <li><Link to="anual">Vista Anual</Link></li>
+          <li><Link to="mensual">Vista Mensual</Link></li>
+          <li><Link to="semanal">Vista Semanal</Link></li>
+          {/* <li><Link to="diaria">Vista Diaria</Link></li> */}
+        </ul>
       </nav>
 
-      <main className="dashboard-main">
+      <div className="vista">
         <Routes>
-          <Route path="year" element={<VistaAnual />} />
-          <Route path="month" element={<VistaMensual />} />
-          <Route path="week" element={<VistaSemanal />} />
-          {/* <Route path="day" element={<VistaDiaria />} /> */}
+          <Route path="anual" element={<VistaAnual />} />
+          <Route path="mensual" element={<VistaMensual />} />
+          <Route path="semanal" element={<VistaSemanal />} />
+          {/* <Route path="diaria" element={<VistaDiaria />} /> */}
         </Routes>
-      </main>
+      </div>
     </div>
   );
-};
+}
 
 export default Dashboard;
