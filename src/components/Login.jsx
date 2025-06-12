@@ -1,7 +1,7 @@
 function Login({ onLoginSuccess }) {
     const handleLogin = () => {
       // Aquí podrías verificar credenciales, etc.
-      onLoginSuccess(); // Simula un login exitoso
+    //   onLoginSuccess(); // Simula un login exitoso
     };
   
     return (
