@@ -1,19 +1,14 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from "./components/Login";
-import Dashboard from "./pages/Dashboard";
+import VistaSemanal from './components/calendar/VistaSemanal';
 
 function App() {
   const isLoggedIn = localStorage.getItem('user');
 
 
   return(
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/*" element={<Dashboard />} />
-      </Routes>
-    </Router>
-    <VistaMensual></VistaMensual>
+    <>
+    <VistaSemanal semana={`S1`}></VistaSemanal>
     </>
   );
 }
