@@ -1,15 +1,53 @@
+import { useState } from 'react';
+import '../estilos/Login.css'; // Si querés estilos personalizados
+
 function Login({ onLoginSuccess }) {
-    const handleLogin = () => {
-      // Aquí podrías verificar credenciales, etc.
-    //   onLoginSuccess(); // Simula un login exitoso
-    };
-  
-    return (
-      <div style={{ textAlign: 'center', marginTop: '50px' }}>
-        <h2>Iniciar Sesión</h2>
-        <button onClick={handleLogin}>Ingresar</button>
-      </div>
-    );
-  }
-  
-  export default Login;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Lógica temporal de validación (podés conectar esto con tu backend después)
+    if (username === 'admin' && password === '1234') {
+      setError('');
+      onLoginSuccess();
+    } else {
+      setError('Credenciales inválidas');
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <h2>Iniciar Sesión</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Usuario:
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          Contraseña:
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+
+        {error && <p className="error">{error}</p>}
+
+        <button type="submit">Ingresar</button>
+      </form>
+    </div>
+  );
+}
+
+export default Login;
