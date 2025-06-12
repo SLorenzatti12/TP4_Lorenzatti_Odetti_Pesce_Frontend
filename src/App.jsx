@@ -2,10 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import VistaAnual from './components/Calendar/VistaAnual';
-import VistaMensual from './components/Calendar/VistaMensual';
-import VistaSemanal from './components/Calendar/VistaSemanal';
-// import VistaDiaria from './components/Calendar/VistaDiaria';
+import VistaAnual from './components/calendar/VistaAnual';
+import VistaMensual from './components/calendar/VistaMensual';
+import VistaSemanal from './components/calendar/VistaSemanal';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,10 +18,7 @@ function App() {
         <Route path="mensual" element={<VistaMensual />} />
         <Route path="semanal" element={<VistaSemanal />} />
         
-        {/* <Route path="diaria" element={<VistaDiaria />} /> */}
       </Route>
-      
-      {/* <Route path="*" element={<h2>Página no encontrada</h2>} /> */}
     </Routes>
   );
 }
