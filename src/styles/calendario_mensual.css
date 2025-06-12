@@ -1,0 +1,63 @@
+
+.barra {
+    justify-content: space-between;
+}
+
+.calendario-mensual {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2.5px;
+}
+
+.lu {
+    aspect-ratio: 1/1;
+    grid-column: 2;
+}
+
+.ma {
+    aspect-ratio: 1/1;
+    grid-column: 3;
+}
+
+.mi {
+    aspect-ratio: 1/1;
+    grid-column: 4;
+}
+
+.ju {
+    aspect-ratio: 1/1;
+    grid-column: 5;
+}
+
+.vi {
+    aspect-ratio: 1/1;
+    grid-column: 6;
+}
+
+.sa {
+    aspect-ratio: 1/1;
+    grid-column: 7;
+}
+
+.do {
+    aspect-ratio: 1/1;
+    grid-column: 8;
+}
+
+.tiene_popup    {
+    position: relative;
+    z-index: 0;
+}
+
+.tiene_popup::after    {
+    content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  background-color: red;
+  border-radius: 50%;
+  z-index: -1;
+}
