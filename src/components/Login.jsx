@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import '../estilos/Login.css'; // Si querés estilos personalizados
+import { useNavigate } from 'react-router-dom';
 
 function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,6 +47,10 @@ function Login({ onLoginSuccess }) {
         {error && <p className="error">{error}</p>}
 
         <button type="submit">Ingresar</button>
+        <button className="registro-btn" onClick={() => navigate('/register')}>
+            ¿No tienes cuenta? Registrate
+        </button>
+        
       </form>
     </div>
   );
