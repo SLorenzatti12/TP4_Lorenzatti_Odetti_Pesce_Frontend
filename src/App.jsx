@@ -1,16 +1,13 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Login from "./components/Login";
-import Dashboard from "./pages/Dashboard";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './components/Dashboard';
+import Login from './components/Login';
 
 function App() {
-  const isLoggedIn = localStorage.getItem('user');
-
-
-  return(
+  return (
     <Router>
       <Routes>
-        <Route path="/" element={isLoggedIn ? <Navigate to= "/dashboard/year" /> : <Login />}/>
-        <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/*" element={<Dashboard />} />
       </Routes>
     </Router>
   );
