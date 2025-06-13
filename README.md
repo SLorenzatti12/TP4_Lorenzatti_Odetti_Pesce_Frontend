@@ -15,6 +15,4 @@ Aplicación web que permite a estudiantes universitarios organizar y visualizar 
 - Vista Anual: planificación general por meses
 - Vista Mensual: detalle de eventos por día
 - Vista Semanal: visualización día por día
-- Vista Diaria (en desarrollo): línea de tiempo por horarios
-- Creación, edición y eliminación de eventos
-- Interfaz adaptada a tema oscuro
+- Creación, edición y eliminación de eventos y tareas
