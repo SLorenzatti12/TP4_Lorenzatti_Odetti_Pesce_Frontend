@@ -1,63 +1,113 @@
+.vista-mensual-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fefefe;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
 
 .barra {
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #f8f9fa;
+  border-radius: 0.75rem;
+  max-width: 720px;
+  margin: 0 auto 1.5rem auto;
+}
+
+button {
+    margin-top: 0%;
+    
+}
+
+.boton-control {
+  height: 40px;
+  width: 40px;
+  aspect-ratio: 1/1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selector-del-mes {
+  height: 40px;
+  line-height: 1;
+  padding: 0 0.75rem;
+}
+
+.nav-btn, .add-btn {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.nav-btn:hover, .add-btn:hover {
+    background-color: #2980b9;
+}
+
+.mes-titulo {
+    text-align: center;
+    font-size: 1.8rem;
+    margin: 1rem 0;
+    color: #2c3e50;
 }
 
 .calendario-mensual {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    gap: 2.5px;
+    gap: 8px;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #f4f6f8;
+    border-radius: 12px;
 }
 
-.lu {
-    aspect-ratio: 1/1;
-    grid-column: 2;
+.calendario-mensual span {
+    text-align: center;
+    font-weight: 600;
+    padding: 0.4rem;
+    color: #2d3436;
 }
 
-.ma {
-    aspect-ratio: 1/1;
-    grid-column: 3;
+.mes_lu, .mes_ma, .mes_mi, .mes_ju, .mes_vi, .mes_sa, .mes_do {
+    aspect-ratio: 1 / 1;
 }
 
-.mi {
-    aspect-ratio: 1/1;
-    grid-column: 4;
-}
+.mes_lu { grid-column: 2; }
+.mes_ma { grid-column: 3; }
+.mes_mi { grid-column: 4; }
+.mes_ju { grid-column: 5; }
+.mes_vi { grid-column: 6; }
+.mes_sa { grid-column: 7; }
+.mes_do { grid-column: 8; }
 
-.ju {
-    aspect-ratio: 1/1;
-    grid-column: 5;
-}
-
-.vi {
-    aspect-ratio: 1/1;
-    grid-column: 6;
-}
-
-.sa {
-    aspect-ratio: 1/1;
-    grid-column: 7;
-}
-
-.do {
-    aspect-ratio: 1/1;
-    grid-column: 8;
-}
-
-.tiene_popup    {
+/* Día con evento */
+.tiene_popup {
     position: relative;
     z-index: 0;
 }
 
-.tiene_popup::after    {
+.tiene_popup::after {
     content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  background-color: red;
-  border-radius: 50%;
-  z-index: -1;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    aspect-ratio: 1 / 1;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.2;
 }

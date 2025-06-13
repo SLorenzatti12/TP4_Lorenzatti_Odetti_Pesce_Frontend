@@ -34,7 +34,7 @@ export function Iterante({ day, cant }) {
                     {renderInicioSemana() && (
                         <span className={`S${fila - 2}`}>S{fila - 2}</span>
                     )}
-                    <span className={`${getPosition()} S${fila - 2}`}>
+                    <span className={`mes_${getPosition()} S${fila - 2}`}>
                         {i + 1}
                     </span>
                 </React.Fragment>
