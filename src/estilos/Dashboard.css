@@ -1,32 +1,45 @@
+/* estilos/Dashboard.css */
+
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #1e1e2f;
-    color: #fff;
-  }
-  
-  .dashboard-nav {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: #29293d;
-  }
-  
-  .nav-link {
-    color: #ccc;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .nav-link.active {
-    color: #00bcd4;
-    border-bottom: 2px solid #00bcd4;
-  }
-  
-  .dashboard-main {
-    flex-grow: 1;
-    padding: 1rem;
-    overflow-y: auto;
-  }
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #1e1e2f;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.dashboard-nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem 0;
+  background-color: #29293d;
+  border-bottom: 1px solid #444;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #bbb;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s, border-bottom 0.2s;
+}
+
+.nav-link:hover {
+  color: #00bcd4;
+}
+
+.nav-link.active {
+  color: #00bcd4;
+  border-bottom: 2px solid #00bcd4;
+  padding-bottom: 0.25rem;
+}
+
+.dashboard-main {
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: #1e1e2f;
+  overflow-y: auto;
+}

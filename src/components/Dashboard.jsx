@@ -3,18 +3,16 @@ import { Outlet, NavLink } from 'react-router-dom';
 
 function Dashboard() {
   return (
-    <div className="dashboard">
-      <nav>
-        <ul>
-          <li><NavLink to="anual">Vista Anual</NavLink></li>
-          <li><NavLink to="mensual">Vista Mensual</NavLink></li>
-          <li><NavLink to="semanal">Vista Semanal</NavLink></li>
-        </ul>
+    <div className="dashboard-container">
+      <nav className="dashboard-nav">
+        <NavLink to="anual" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Vista Anual</NavLink>
+        <NavLink to="mensual" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Vista Mensual</NavLink>
+        <NavLink to="semanal" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Vista Semanal</NavLink>
       </nav>
 
-      <div className="vista">
+      <main className="dashboard-main">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 }

@@ -10,11 +10,12 @@ function Login({ onLoginSuccess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Lógica temporal de validación (podés conectar esto con tu backend después)
-    if (username === 'admin' && password === '1234') {
+  
+    const storedUser = JSON.parse(localStorage.getItem('registeredUser'));
+  
+    if (storedUser && username === storedUser.username && password === storedUser.password) {
       setError('');
-      onLoginSuccess();
+      onLoginSuccess(); // Login exitoso
     } else {
       setError('Credenciales inválidas');
     }

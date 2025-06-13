@@ -19,6 +19,7 @@ function App() {
       
       <Route path="/dashboard" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/" />}>
         <Route index element={<VistaAnual />} />
+        <Route path="anual" element={<VistaAnual />} />
         <Route path="mensual" element={<VistaMensual />} />
         <Route path="semanal" element={<VistaSemanal />} />
         
