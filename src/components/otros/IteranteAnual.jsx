@@ -16,24 +16,35 @@ export function IteranteAnual({ day, cant, elementos = [] }) {
       {Array.from({ length: cant }, (_, i) => {
         const dayNumber = i + 1;
         const positionClass = getPosition();
-
         const itemsToday = elementos.filter(e => e.day === dayNumber);
+
+        const tipos = [...new Set(itemsToday.map(e => e.tipo))];
+
+        let tipoClass = '';
+        if (tipos.includes('objetivo') && tipos.includes('evento')) {
+          tipoClass = 'objetivo_evento';
+        } else if (tipos.includes('objetivo')) {
+          tipoClass = 'solo_objetivo';
+        } else if (tipos.includes('evento')) {
+          tipoClass = 'solo_evento';
+        }
+
+        const classes = [
+          positionClass,
+          itemsToday.length ? 'tiene_popup_anual' : '',
+          tipoClass
+        ].join(' ');
 
         const tooltipText = itemsToday.length
           ? itemsToday.map(e => `${e.tipo.toUpperCase()}: ${e.titulo} - ${e.descripcion}`).join('\n')
           : '';
-
-        const classes = [
-          positionClass,
-          itemsToday.length ? 'tiene_popup' : '',
-          ...new Set(itemsToday.map(e => e.tipo))
-        ].join(' ');
 
         return (
           <span
             key={i}
             className={classes}
             title={tooltipText}
+            style={{ position: 'relative' }}
           >
             {dayNumber}
           </span>

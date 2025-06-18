@@ -45,7 +45,7 @@ const VistaMensual = () => {
     const items = [];
 
     objetivos?.forEach(obj => {
-      const fecha = new Date(obj.fecha_limite);
+      const fecha = new Date(obj.fecha_limite.split('T')[0] + 'T12:00:00');
       if (fecha.getFullYear() === year && fecha.getMonth() === mesSeleccionado) {
         items.push({
           day: fecha.getDate(),
@@ -57,7 +57,7 @@ const VistaMensual = () => {
     });
 
     eventos?.forEach(evt => {
-      const fecha = new Date(evt.fecha);
+      const fecha = new Date(evt.fecha.split('T')[0] + 'T12:00:00');
       if (fecha.getFullYear() === year && fecha.getMonth() === mesSeleccionado) {
         items.push({
           day: fecha.getDate(),

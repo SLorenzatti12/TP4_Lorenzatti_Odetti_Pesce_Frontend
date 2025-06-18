@@ -36,7 +36,7 @@ export const VistaAnual = () => {
     const items = [];
 
     objetivos?.forEach(obj => {
-      const fecha = new Date(obj.fecha_limite);
+      const fecha = new Date(obj.fecha_limite.split('T')[0] + 'T12:00:00');
       if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
         items.push({
         day: fecha.getDate(),
@@ -49,7 +49,7 @@ export const VistaAnual = () => {
 
     tareas?.forEach(tarea => {
       if (!tarea.fecha_limite) return;
-        const fecha = new Date(tarea.fecha_limite);
+        const fecha = new Date(tarea.fecha_limite.split('T')[0] + 'T12:00:00');
         if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
           items.push({
             day: fecha.getDate(),
@@ -61,7 +61,7 @@ export const VistaAnual = () => {
     });
 
     eventos?.forEach(evento => {
-      const fecha = new Date(evento.fecha);
+      const fecha = new Date(evento.fecha.split('T')[0] + 'T12:00:00');
       if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
         items.push({
           day: fecha.getDate(),

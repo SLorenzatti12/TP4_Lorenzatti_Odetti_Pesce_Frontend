@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../../../styles/modal.css';
+import CrearTareaModal from './CrearTareaModal';
 
 const CrearEventoModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ const CrearEventoModal = ({ onClose }) => {
     duration: '',
     place: '',
   });
+
+  const [showTareaModal, setShowTareaModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,56 +55,70 @@ const CrearEventoModal = ({ onClose }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <form onSubmit={handleSubmit} className="modal-form">
-        <h2 style={{ textAlign: 'center' }}>Registrar Evento</h2>
-        <input
-          type="text"
-          name="title"
-          placeholder="Título"
-          value={formData.title}
-          onChange={handleChange}
-          style={{ textAlign: 'center' }}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Descripción"
-          value={formData.description}
-          onChange={handleChange}
-          style={{ textAlign: 'center' }}
-          required
-        />
-        <input
-          type="date"
-          name="beginDate"
-          value={formData.beginDate}
-          onChange={handleChange}
-          style={{ textAlign: 'center' }}
-          required
-        />
-        <input
-          type="number"
-          name="duration"
-          placeholder="Duración (minutos)"
-          value={formData.duration}
-          onChange={handleChange}
-          style={{ textAlign: 'center' }}
-          min={1}
-          required
-        />
-        <input
-          type="text"
-          name="place"
-          placeholder="Lugar"
-          value={formData.place}
-          onChange={handleChange}
-          style={{ textAlign: 'center' }}
-        />
-        <button type="submit" className="btn-primary">Guardar</button>
-        <button type="button" className="btn-secondary" onClick={onClose}>Cancelar</button>
-      </form>
-    </div>
+    <>
+      <div className="modal-overlay">
+        <form onSubmit={handleSubmit} className="modal-form">
+          <h2 style={{ textAlign: 'center' }}>Registrar Evento</h2>
+          <input
+            type="text"
+            name="title"
+            placeholder="Título"
+            value={formData.title}
+            onChange={handleChange}
+            style={{ textAlign: 'center' }}
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Descripción"
+            value={formData.description}
+            onChange={handleChange}
+            style={{ textAlign: 'center' }}
+            required
+          />
+          <input
+            type="date"
+            name="beginDate"
+            value={formData.beginDate}
+            onChange={handleChange}
+            style={{ textAlign: 'center' }}
+            required
+          />
+          <input
+            type="number"
+            name="duration"
+            placeholder="Duración (minutos)"
+            value={formData.duration}
+            onChange={handleChange}
+            style={{ textAlign: 'center' }}
+            min={1}
+            required
+          />
+          <input
+            type="text"
+            name="place"
+            placeholder="Lugar"
+            value={formData.place}
+            onChange={handleChange}
+            style={{ textAlign: 'center' }}
+          />
+
+          <button              
+            type="button"
+            className="btn-secondary"
+            onClick={() => setShowTareaModal(true)}
+            style={{ marginLeft: '10px' }}
+          >
+            Agregar Tarea
+          </button>
+
+          <button type="submit" className="btn-primary">Guardar</button>
+          <button type="button" className="btn-secondary" onClick={onClose}>Cancelar</button>
+        </form>
+      </div>
+      
+      {showTareaModal && <CrearTareaModal onClose={() => setShowTareaModal(false)} />}
+    </>
   );
 };
 
