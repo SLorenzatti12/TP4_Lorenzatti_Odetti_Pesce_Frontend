@@ -181,6 +181,7 @@ button {
   grid-column: 8;
 }
 
+<<<<<<< HEAD
 /* Día con elementos */
 .tiene_popup {
   position: relative;
@@ -216,4 +217,34 @@ button {
 .tiene_popup.objetivo_evento::after {
   background: linear-gradient(135deg, red 50%, green 50%);
   opacity: 0.4;
+=======
+.tiene_popup {
+  position: relative;
+  overflow: hidden; /* Asegura que las pseudo-líneas no sobresalgan */
+}
+
+/* Línea azul (objetivo) - un poco más arriba */
+.objetivo::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; /* Más arriba que la roja */
+  left: 15%;
+  width: 70%;
+  height: 4px;
+  margin-bottom: 2px;
+  background-color: red; /* Azul */
+  border-radius: 2px;
+}
+
+/* Línea roja (evento) - justo abajo */
+.evento::before {
+  content: '';
+  position: absolute;
+  bottom: 2px; /* Más cerca del borde inferior */
+  left: 15%;
+  width: 70%;
+  height: 4px;
+  background-color: green; /* Rojo */
+  border-radius: 2px;
+>>>>>>> 6cd765e9b4bf022da40f683fcfce5caa4d32258e
 }
