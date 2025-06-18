@@ -128,22 +128,32 @@ button {
 .mes_sa { grid-column: 7; }
 .mes_do { grid-column: 8; }
 
-/* Día con evento */
 .tiene_popup {
-    position: relative;
-    z-index: 0;
+  position: relative;
+  overflow: hidden; /* Asegura que las pseudo-líneas no sobresalgan */
 }
 
-.tiene_popup::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    aspect-ratio: 1 / 1;
-    background-color: #ff6b6b;
-    border-radius: 50%;
-    z-index: -1;
-    opacity: 0.2;
+/* Línea azul (objetivo) - un poco más arriba */
+.objetivo::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; /* Más arriba que la roja */
+  left: 15%;
+  width: 70%;
+  height: 4px;
+  margin-bottom: 2px;
+  background-color: red; /* Azul */
+  border-radius: 2px;
+}
+
+/* Línea roja (evento) - justo abajo */
+.evento::before {
+  content: '';
+  position: absolute;
+  bottom: 2px; /* Más cerca del borde inferior */
+  left: 15%;
+  width: 70%;
+  height: 4px;
+  background-color: green; /* Rojo */
+  border-radius: 2px;
 }

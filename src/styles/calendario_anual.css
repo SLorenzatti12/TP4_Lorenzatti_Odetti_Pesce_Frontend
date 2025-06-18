@@ -105,20 +105,6 @@
     grid-column: 7;
 }
 
-.tiene_popup::after {
-  background-color: #e74c3c;
-  color: white;
-  border-radius: 50%;
-  padding: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  display: inline-block;
-  text-align: center;
-  line-height: 2rem;
-  box-shadow: 0 0 6px #e74c3c;
-  font-weight: bold;
-}
-
 *, *::before, *::after {
     box-sizing: border-box;
 }
