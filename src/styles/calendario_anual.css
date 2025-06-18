@@ -1,3 +1,26 @@
+.mini-tooltip {
+  position: absolute;
+  top: 28px; /* justo debajo del día */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  z-index: 100;
+  width: 200px;
+  font-size: 0.8rem;
+  pointer-events: auto;
+  user-select: text;
+}
+
+.mini-tooltip-item + .mini-tooltip-item {
+  margin-top: 6px;
+  border-top: 1px solid #444;
+  padding-top: 6px;
+}
+
 .calendario_anual {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -35,12 +58,13 @@
 }
 
 .dias_semana span {
-    padding: 0.3rem 0;
-    border-bottom: 1px solid #ddd;
-    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    padding: 0.4rem;
+    color: #2d3436;
     text-align: center;
-    line-height: 1;
-    font-size: 0.8rem;
     position: relative;
     border-radius: 17.5%;
     border-bottom: 2px solid rgba(0, 0, 0, 0.05);
@@ -81,17 +105,18 @@
     grid-column: 7;
 }
 
-.dia.tiene_popup::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
-    height: 70%;
-    background-color: red;
-    border-radius: 50%;
-    z-index: -1;
+.tiene_popup::after {
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  text-align: center;
+  line-height: 2rem;
+  box-shadow: 0 0 6px #e74c3c;
+  font-weight: bold;
 }
 
 *, *::before, *::after {

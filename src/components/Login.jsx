@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import '../estilos/Login.css'; // Si querés estilos personalizados
 import { useNavigate } from 'react-router-dom';
 
@@ -8,18 +9,27 @@ function Login({ onLoginSuccess }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    const storedUser = JSON.parse(localStorage.getItem('registeredUser'));
-  
-    if (storedUser && username === storedUser.username && password === storedUser.password) {
-      setError('');
-      onLoginSuccess(); // Login exitoso
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await axios.post('http://localhost:3000/api/users/login', {
+      nombre: username,
+      contraseña: password
+    });
+
+    const { token } = res.data;
+    localStorage.setItem('token', token);
+    setError('');
+    onLoginSuccess(); // o navigate('/dashboard') si corresponde
+  } catch (err) {
+    if (err.response) {
+      setError(err.response.data.error || 'Error en el login');
     } else {
-      setError('Credenciales inválidas');
+      setError('Error de red');
     }
-  };
+  }
+};
 
   return (
     <div className="login-container">

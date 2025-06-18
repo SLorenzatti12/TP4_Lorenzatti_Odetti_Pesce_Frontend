@@ -1,29 +1,43 @@
 import { useState } from 'react';
+import axios from 'axios';
 import '../estilos/Login.css'; // Reutiliza los estilos del Login
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setError('Las contraseñas no coinciden');
-      return;
-    }
+  if (password !== confirmPassword) {
+    setError('Las contraseñas no coinciden');
+    return;
+  }
 
-    // Guardado temporal en localStorage (puede cambiarse por backend)
-    const userData = { username, password };
-    localStorage.setItem('registeredUser', JSON.stringify(userData));
+  try {
+    const res = await axios.post('http://localhost:3000/api/users/signup', {
+      nombre: username,
+      email,
+      contraseña: password
+    });
+
+    console.log(res.data); // { mensaje, id }
 
     setError('');
     navigate('/'); // Redirige al login
-  };
+  } catch (err) {
+    if (err.response) {
+      setError(err.response.data.error || 'Error al registrar usuario');
+    } else {
+      setError('Error de red');
+    }
+  }
+};
 
   return (
     <div className="login-container">
@@ -37,6 +51,15 @@ function Register() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+        </label>
+
+        <label>
+          Email:
+          <input type='email'
+            value={email}
+            onChange={(e)=> setEmail(e.target.value)}
+            required>
+          </input>
         </label>
 
         <label>
