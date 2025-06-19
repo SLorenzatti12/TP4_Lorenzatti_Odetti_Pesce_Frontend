@@ -105,42 +105,6 @@
     grid-column: 7;
 }
 
-<<<<<<< HEAD
-.tiene_popup_anual {
-  position: relative;
-  z-index: 0;
-}
-
-.tiene_popup_anual::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  z-index: -1;
-  opacity: 0.25;
-}
-
-.tiene_popup_anual.solo_objetivo::after {
-  background-color: red;
-  box-shadow: 0 0 6px red;
-}
-
-.tiene_popup_anual.solo_evento::after {
-  background-color: green;
-  box-shadow: 0 0 6px green;
-}
-
-.tiene_popup_anual.objetivo_evento::after {
-  background: linear-gradient(135deg, red, green);
-  box-shadow: 0 0 6px #444;
-}
-
-=======
->>>>>>> 6cd765e9b4bf022da40f683fcfce5caa4d32258e
 *, *::before, *::after {
     box-sizing: border-box;
 }
