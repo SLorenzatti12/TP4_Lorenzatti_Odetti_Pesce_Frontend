@@ -1,4 +1,6 @@
-export function IteranteAnual({ day, cant, elementos = [] }) {
+import React from 'react';
+
+export function IteranteAnual({ day, cant, elementos = [], onDayHover, onDayLeave }) {
   const days = ['lu', 'ma', 'mi', 'ju', 'vi', 'sa', 'do'];
   let previous;
 
@@ -35,16 +37,15 @@ export function IteranteAnual({ day, cant, elementos = [] }) {
           tipoClass
         ].join(' ');
 
-        const tooltipText = itemsToday.length
-          ? itemsToday.map(e => `${e.tipo.toUpperCase()}: ${e.titulo} - ${e.descripcion}`).join('\n')
-          : '';
-
         return (
           <span
             key={i}
             className={classes}
-            title={tooltipText}
-            style={{ position: 'relative' }}
+            style={{ position: 'relative', cursor: itemsToday.length ? 'pointer' : 'default' }}
+            onMouseEnter={(e) => {
+              if (itemsToday.length) onDayHover?.(itemsToday, dayNumber, e);
+            }}
+            onMouseLeave={() => onDayLeave?.()}
           >
             {dayNumber}
           </span>

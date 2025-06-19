@@ -92,8 +92,16 @@ const CrearObjetivoModal = ({ onClose }) => {
           </button>
         </form>
       </div>
-
-      {showTareaModal && <CrearTareaModal onClose={() => setShowTareaModal(false)} />}
+      
+      {showTareaModal && 
+        <CrearTareaModal
+          onClose={() => setShowTareaModal(false)}
+          onCreate={(tarea) => {
+            setFormData(prev => ({ ...prev, tareaId: tarea.id }));
+            setShowTareaModal(false);
+          }}
+        />
+      }
     </>
   );
 };
