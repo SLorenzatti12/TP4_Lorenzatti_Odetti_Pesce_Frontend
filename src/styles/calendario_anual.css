@@ -105,7 +105,6 @@
     grid-column: 7;
 }
 
-<<<<<<< HEAD
 .tiene_popup_anual {
   position: relative;
   z-index: 0;
@@ -139,8 +138,6 @@
   box-shadow: 0 0 6px #444;
 }
 
-=======
->>>>>>> 6cd765e9b4bf022da40f683fcfce5caa4d32258e
 *, *::before, *::after {
     box-sizing: border-box;
 }

@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../../styles/modal.css';
 
-const CrearTareaModal = ({ onClose, onCreated }) => {
+const ModalEditarTarea = ({ tarea, onClose, onUpdated }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     deadLine: '',
     priority: 1
   });
+
+  useEffect(() => {
+    if (tarea) {
+      setFormData({
+        title: tarea.titulo || '',
+        description: tarea.descripcion || '',
+        deadLine: tarea.fechaLimite ? tarea.fechaLimite.split('T')[0] : '',
+        priority: tarea.prioridad || 1,
+      });
+    }
+  }, [tarea]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,8 +35,8 @@ const CrearTareaModal = ({ onClose, onCreated }) => {
     try {
       const token = localStorage.getItem('token');
 
-      const response = await axios.post(
-        'http://localhost:3000/api/tasks',
+      const response = await axios.put(
+        `http://localhost:3000/api/tasks/${tarea.id}`,
         {
           title: formData.title,
           description: formData.description,
@@ -39,11 +50,11 @@ const CrearTareaModal = ({ onClose, onCreated }) => {
         }
       );
 
-      console.log('Tarea creada:', response.data);
-      if (onCreated) onCreated(response.data);
+      console.log('Tarea actualizada:', response.data);
+      if (onUpdated) onUpdated(response.data);
       onClose();
     } catch (error) {
-      console.error('Error al crear tarea:', error.response?.data || error.message);
+      console.error('Error al actualizar tarea:', error.response?.data || error.message);
       alert('Error: ' + JSON.stringify(error.response?.data));
     }
   };
@@ -51,7 +62,7 @@ const CrearTareaModal = ({ onClose, onCreated }) => {
   return (
     <div className="modal-overlay">
       <form onSubmit={handleSubmit} className="modal-form">
-        <h2 style={{ textAlign: 'center' }}>Registrar Tarea</h2>
+        <h2 style={{ textAlign: 'center' }}>Editar Tarea</h2>
 
         <input
           type="text"
@@ -98,4 +109,4 @@ const CrearTareaModal = ({ onClose, onCreated }) => {
   );
 };
 
-export default CrearTareaModal;
+export default ModalEditarTarea;
