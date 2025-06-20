@@ -25,53 +25,42 @@ export const VistaAnual = () => {
   const [hoverModalItems, setHoverModalItems] = useState([]);
   const [hoverModalDay, setHoverModalDay] = useState(null);
   const [hoverModalPos, setHoverModalPos] = useState({ x: 0, y: 0 });
-
+  
   const hoverTimeoutRef = useRef(null);
+  const [isHovering, setIsHovering] = useState(false);
 
-    const handleDayHover = (items, dayNumber, e) => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+const handleDayHover = (items, dayNumber, e) => {
+  if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
 
-    const modalWidth = 350;
-    const modalHeight = 300;
-    const padding = 10;
+  // cálculo de posición...
+  const x = e.clientX + 10;
+  const y = e.clientY + 10;
 
-    let x = e.clientX + 10;
-    let y = e.clientY + 10;
+  setHoverModalItems(items);
+  setHoverModalDay(dayNumber);
+  setHoverModalPos({ x, y });
+  setHoverModalVisible(true);
+  setIsHovering(true);
+};
 
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+const handleDayLeave = () => {
+  setIsHovering(false);
+  hoverTimeoutRef.current = setTimeout(() => {
+    if (!isHovering) setHoverModalVisible(false);
+  }, 800);
+};
 
-    // Si se pasa a la derecha
-    if (x + modalWidth > windowWidth) {
-      x = e.clientX - modalWidth - padding;
-    }
+const handleModalMouseEnter = () => {
+  if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+  setIsHovering(true);
+};
 
-    // Si se pasa hacia abajo
-    if (y + modalHeight > windowHeight) {
-      y = e.clientY - modalHeight;
-    }
-
-    setHoverModalItems(items);
-    setHoverModalDay(dayNumber);
-    setHoverModalPos({ x, y });
-    setHoverModalVisible(true);
-  };
-
-  const handleDayLeave = () => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setHoverModalVisible(false);
-    }, 1400);
-  };
-
-  const handleModalMouseEnter = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-  };
-
-  const handleModalMouseLeave = () => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setHoverModalVisible(false);
-    }, 1400);
-  };
+const handleModalMouseLeave = () => {
+  setIsHovering(false);
+  hoverTimeoutRef.current = setTimeout(() => {
+    if (!isHovering) setHoverModalVisible(false);
+  }, 800);
+};
 
   const handleDelete = async (item) => {
     const endpoint = item.tipo === 'evento' ? 'events' : 'goals';
@@ -254,17 +243,35 @@ export const VistaAnual = () => {
       </div>
 
       {/* Modal flotante al pasar el mouse */}
-      <MostrarInfoModal
-        visible={hoverModalVisible}
-        items={hoverModalItems}
-        day={hoverModalDay}
-        position={hoverModalPos}
-        onMouseEnter={handleModalMouseEnter}
-        onMouseLeave={handleModalMouseLeave}
-        onEdit={(item) => setItemEdicion(item)}
-        onDelete={handleDelete}
-      />
-
+      {hoverModalVisible && (
+      <div
+          className='modal-hover'
+          style={{
+            position: 'fixed',
+            top: hoverModalPos.y,
+            left: hoverModalPos.x,
+            width: '360px',
+            backgroundColor: '#333',
+            color: 'white',
+            borderRadius: '8px',
+            padding: '10px',
+            zIndex: 2000,
+          }}
+          onMouseEnter={handleModalMouseEnter}
+          onMouseLeave={handleModalMouseLeave}
+        >
+          <MostrarInfoModal
+            visible={hoverModalVisible}
+            items={hoverModalItems}
+            day={hoverModalDay}
+            position={hoverModalPos}
+            onMouseEnter={handleModalMouseEnter}
+            onMouseLeave={handleModalMouseLeave}
+            onEdit={(item) => setItemEdicion(item)}
+            onDelete={handleDelete}
+          />
+        </div>
+      )}
       {itemEdicion && (
         <ModalEdicion
           item={itemEdicion}

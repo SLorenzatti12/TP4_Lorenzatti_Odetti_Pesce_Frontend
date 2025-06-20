@@ -12,71 +12,50 @@ const MostrarInfoModal = ({
 }) => {
   if (!visible) return null;
 
+  const objetivos = items.filter(item => item.tipo === 'obketivo');
+  const eventos = items.filter(item => item.tipo === 'evento');
+
   return (
-    <div
-        id='modal-info'
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        style={{
-            position: 'fixed',
-            top: position.y + 5,
-            left: position.x + 5,
-            backgroundColor: 'white',
-            color: 'black',
-            padding: 20,
-            borderRadius: 8,
-            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
-            maxWidth: 350,
-            maxHeight: '70vh',
-            overflowY: 'auto',
-            zIndex: 10000,
-            pointerEvents: 'auto',
-            fontSize: 14,
-        }
-    }
-    >
+    <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ pointerEvents: 'auto' }}>
       <h3>Día {day}</h3>
-      {items.map((item, idx) => (
-        <div
-          key={idx}
-          style={{ marginBottom: 12, borderBottom: '1px solid black', paddingBottom: 8 }}
-        >
-          <div><strong>Tipo:</strong> {item.tipo}</div>
-          <div><strong>Título:</strong> {item.titulo}</div>
-          <div><strong>Descripción:</strong> {item.descripcion}</div>
-          <div style={{ marginTop: 6 }}>
-            <button
-              onClick={() => onEdit(item)}
-              style={{
-                marginRight: 8,
-                backgroundColor: '#0d6efd',
-                color: 'white',
-                border: 'none',
-                borderRadius: 4,
-                padding: '4px 8px',
-                cursor: 'pointer',
-              }}
-            >
-              Editar
-            </button>
-            <button
-              onClick={() => onDelete(item)}
-              style={{
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: 4,
-                padding: '4px 8px',
-                cursor: 'pointer',
-              }}
-            >
-              Eliminar
-            </button>
+
+      {objetivos.length > 0 && (
+        <div style={{ marginBottom: '1.5rem' }}>
+        <h4 style={{ borderBottom: '1px solid #00bcd4', paddingBottom: '4px' }}>
+          Objetivos
+        </h4>
+        {objetivos.map((o, i) => (
+          <div key={i} style={{ marginBottom: '10px' }}>
+            <strong>{o.titulo}</strong><br />
+            <small>{o.descripcion}</small><br />
+            <button onClick={() => onEdit(o)} style={{ marginRight: '8px' }}>Editar</button>
+            <button onClick={() => onDelete(o)}>Eliminar</button>
           </div>
+        ))}
+      </div>
+    )}
+
+    {eventos.length > 0 && (
+            <div>
+              <h4 style={{ borderBottom: '1px solid #ff6b6b', paddingBottom: '4px' }}>
+                Eventos
+              </h4>
+              {eventos.map((e, i) => (
+                <div key={i} style={{ marginBottom: '10px' }}>
+                  <strong>{e.titulo}</strong><br />
+                  <small>{e.descripcion}</small><br />
+                  <button onClick={() => onEdit(e)} style={{ marginRight: '8px' }}>Editar</button>
+                  <button onClick={() => onDelete(e)}>Eliminar</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {objetivos.length === 0 && eventos.length === 0 && (
+            <p>No hay objetivos ni eventos para este día.</p>
+          )}
         </div>
-      ))}
-    </div>
-  );
-};
+      );
+    };
 
 export default MostrarInfoModal;
