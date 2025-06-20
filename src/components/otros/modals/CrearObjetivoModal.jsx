@@ -3,11 +3,11 @@ import axios from 'axios';
 import '../../../styles/modal.css';
 import CrearTareaModal from './CrearTareaModal';
 
-const CrearObjetivoModal = ({ onClose }) => {
+const CrearObjetivoModal = ({ onClose, onCreated, initialDate = '' }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    deadLine: '',
+    deadLine: initialDate,
   });
 
   const [showTareaModal, setShowTareaModal] = useState(false);
@@ -82,7 +82,6 @@ const CrearObjetivoModal = ({ onClose }) => {
             type="button"
             className="btn-secondary"
             onClick={() => setShowTareaModal(true)}
-            style={{ marginLeft: '10px' }}
           >
             Agregar Tarea
           </button>

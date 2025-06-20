@@ -35,7 +35,7 @@ const handleSubmit = async (e) => {
     <div className="login-container">
       <h2>Iniciar Sesión</h2>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label className='loginLabel'>
           Usuario:
           <input
             type="text"
@@ -45,7 +45,7 @@ const handleSubmit = async (e) => {
           />
         </label>
 
-        <label>
+        <label className='loginLabel'>
           Contraseña:
           <input
             type="password"

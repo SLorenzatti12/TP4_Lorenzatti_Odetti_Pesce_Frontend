@@ -14,7 +14,7 @@ const MostrarInfoModal = ({
 
   return (
     <div
-        id='modal-info'
+        
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         style={{

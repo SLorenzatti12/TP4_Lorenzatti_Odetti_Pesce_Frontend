@@ -73,35 +73,46 @@ export const VistaAnual = () => {
     }, 1400);
   };
 
-  const handleDelete = async (item) => {
-    const endpoint = item.tipo === 'evento' ? 'events' : 'goals';
-    const token = localStorage.getItem('token');
+const handleDelete = async (item) => {
+  console.log('Eliminando item:', item);
+  if (!item || !item.tipo || !item.id) {
+    alert('Elemento inválido para eliminar');
+    return;
+  }
 
-    const confirm = window.confirm(`¿Estás seguro de que querés eliminar este ${item.tipo}?`);
-    if (!confirm) return;
+  const endpoint = item.tipo === 'evento' ? 'events' : 'goals';
+  const token = localStorage.getItem('token');
 
-    try {
-      const response = await fetch(`http://localhost:3000/api/${endpoint}/${item.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+  const confirmed = window.confirm(`¿Estás seguro de que querés eliminar este ${item.tipo}?`);
+  if (!confirmed) return;
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data?.error || 'Error desconocido');
-      }
+  try {
+    const response = await fetch(`http://localhost:3000/api/${endpoint}/${item.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
-      alert(`${item.tipo[0].toUpperCase() + item.tipo.slice(1)} eliminado correctamente`);
-      setHoverModalVisible(false);
-      // Refrescar datos si tenés una función tipo fetchAll()
-      fetchAll?.();
-    } catch (error) {
-      console.error('Error al eliminar:', error);
-      alert('Error al eliminar: ' + error.message);
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data?.error || 'Error desconocido al eliminar');
     }
-  };
+
+    alert(`${item.tipo[0].toUpperCase() + item.tipo.slice(1)} eliminado correctamente`);
+    setHoverModalVisible(false);
+
+    // Refrescar datos si la función existe
+    if (typeof fetchAll === 'function') {
+      fetchAll();
+    }
+  } catch (error) {
+    console.error('Error al eliminar:', error);
+    alert('Error al eliminar: ' + error.message);
+  }
+};
+
 
   const monthNames = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -122,15 +133,16 @@ export const VistaAnual = () => {
     const items = [];
 
     objetivos?.forEach(obj => {
-      const fecha = new Date(obj.fecha_limite.split('T')[0] + 'T12:00:00');
-      if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
-        items.push({
-          day: fecha.getDate(),
-          tipo: 'objetivo',
-          titulo: obj.titulo,
-          descripcion: obj.descripcion
-        });
-      }
+    const fecha = new Date(obj.fecha_limite.split('T')[0] + 'T12:00:00');
+    if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
+      items.push({
+        id: obj.id,
+        day: fecha.getDate(),
+        tipo: 'objetivo',
+        titulo: obj.titulo,
+        descripcion: obj.descripcion
+      });
+    }
     });
 
     tareas?.forEach(tarea => {
@@ -138,6 +150,7 @@ export const VistaAnual = () => {
       const fecha = new Date(tarea.fecha_limite.split('T')[0] + 'T12:00:00');
       if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
         items.push({
+          id: tarea.id,
           day: fecha.getDate(),
           tipo: 'tarea',
           titulo: tarea.titulo,
@@ -150,6 +163,7 @@ export const VistaAnual = () => {
       const fecha = new Date(evento.fecha.split('T')[0] + 'T12:00:00');
       if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
         items.push({
+          id: evento.id,
           day: fecha.getDate(),
           tipo: 'evento',
           titulo: evento.titulo,
@@ -160,6 +174,7 @@ export const VistaAnual = () => {
 
     return items;
   };
+
 
   const handleSelectOption = (option) => {
     setShowMenu(false);

@@ -186,14 +186,12 @@ const ModalEdicion = ({ item, onClose, onSuccess }) => {
             )}
           </div>
 
-          <div style={{ marginTop: '1rem' }}>
             <button className="btn btn-success" onClick={handleSubmit} type="button">
               Guardar
             </button>
-            <button className="btn btn-secondary" onClick={onClose} type="button" style={{ marginLeft: 8 }}>
+            <button className="btn btn-secondary" onClick={onClose} type="button" style={{marginTop: '5px'}}>
               Cancelar
             </button>
-          </div>
         </div>
       </div>
 

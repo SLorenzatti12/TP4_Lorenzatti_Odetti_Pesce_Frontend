@@ -20,7 +20,7 @@ body {
     text-align: center;
   }
   
-  label {
+  .loginLabel {
     display: block;
     margin: 1rem 0 0.5rem;
   }

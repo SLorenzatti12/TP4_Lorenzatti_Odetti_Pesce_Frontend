@@ -3,24 +3,36 @@ import axios from 'axios';
 import '../../../styles/modal.css';
 import CrearTareaModal from './CrearTareaModal';
 
-const CrearEventoModal = ({ onClose }) => {
+const CrearEventoModal = ({ onClose, fechaInicial }) => {
+  const now = new Date();
+  const localDatetime = now.toISOString().slice(0,16);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    beginDate: '',
+    beginDate: localDatetime,
     duration: '',
     place: '',
-    tareaId: '', // nuevo campo
+    tareaId: '',
   });
 
   const [tareas, setTareas] = useState([]);
   const [showTareaModal, setShowTareaModal] = useState(false);
 
   useEffect(() => {
+    if (fechaInicial) {
+      const localFecha = new Date(fechaInicial.getTime() - fechaInicial.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
+      setFormData(prev => ({ ...prev, beginDate: localFecha }));
+    }
+  }, [fechaInicial]);
+
+  useEffect(() => {
     const fetchTareas = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:3000/api/tareas/mias', {
+        const res = await axios.get('http://localhost:3000/api/tasks', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTareas(res.data);
@@ -96,7 +108,7 @@ const CrearEventoModal = ({ onClose }) => {
           />
 
           <input
-            type="date"
+            type="datetime-local"
             name="beginDate"
             value={formData.beginDate}
             onChange={handleChange}
@@ -124,25 +136,10 @@ const CrearEventoModal = ({ onClose }) => {
             style={{ textAlign: 'center' }}
           />
 
-          <select
-            name="tareaId"
-            value={formData.tareaId}
-            onChange={handleChange}
-            style={{ textAlign: 'center' }}
-          >
-            <option value="">-- Asociar Tarea (opcional) --</option>
-            {tareas.map((tarea) => (
-              <option key={tarea.id} value={tarea.id}>
-                {tarea.title}
-              </option>
-            ))}
-          </select>
-
           <button
             type="button"
             className="btn-secondary"
             onClick={() => setShowTareaModal(true)}
-            style={{ marginLeft: '10px' }}
           >
             Agregar Tarea
           </button>
