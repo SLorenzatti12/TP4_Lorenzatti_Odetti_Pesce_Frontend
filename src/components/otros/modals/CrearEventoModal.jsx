@@ -1,164 +1,117 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import '../../../styles/modal.css';
 import CrearTareaModal from './CrearTareaModal';
 
 const CrearEventoModal = ({ onClose, fechaInicial }) => {
-  const now = new Date();
-  const localDatetime = now.toISOString().slice(0,16);
+  const defaultDate = fechaInicial ? new Date(fechaInicial) : new Date();
+  const localDatetime = defaultDate.toISOString().slice(0, 16);
 
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
+    titulo: '',
+    descripcion: '',
     beginDate: localDatetime,
-    duration: '',
+    duration: 1,
     place: '',
-    tareaId: '',
+    tareaId: null,
   });
 
-  const [tareas, setTareas] = useState([]);
-  const [showTareaModal, setShowTareaModal] = useState(false);
-
-  useEffect(() => {
-    if (fechaInicial) {
-      const localFecha = new Date(fechaInicial.getTime() - fechaInicial.getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 16);
-      setFormData(prev => ({ ...prev, beginDate: localFecha }));
-    }
-  }, [fechaInicial]);
-
-  useEffect(() => {
-    const fetchTareas = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:3000/api/tasks', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTareas(res.data);
-      } catch (err) {
-        console.error('Error al obtener tareas:', err.response?.data || err.message);
-      }
-    };
-    fetchTareas();
-  }, []);
+  const [showCrearTarea, setShowCrearTarea] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const token = localStorage.getItem('token');
 
-    const durationNumber = Number(formData.duration);
-    if (isNaN(durationNumber) || durationNumber <= 0) {
-      alert('La duración debe ser un número mayor que cero');
-      return;
+    const payload = {
+      title: formData.titulo,
+      description: formData.descripcion,
+      beginDate: formData.beginDate,
+      duration: Number(formData.duration),
+      place: formData.place,
+    };
+
+    if (formData.tareaId) {
+      payload.tareaId = formData.tareaId;
     }
 
-    try {
-      const response = await axios.post(
-        'http://localhost:3000/api/events',
-        {
-          title: formData.title,
-          description: formData.description,
-          beginDate: formData.beginDate,
-          duration: durationNumber,
-          place: formData.place,
-          tareaId: formData.tareaId || null
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+    console.log("Payload enviado:", payload);
 
-      console.log('Evento creado:', response.data);
+    try {
+      const res = await fetch('http://localhost:3000/api/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.errores?.join(' - ') || 'Error al crear evento');
+      }
+
+      alert('Evento creado');
       onClose();
-    } catch (error) {
-      console.error('Error al crear evento:', error.response?.data || error.message);
-      alert('Error al crear evento: ' + JSON.stringify(error.response?.data));
+    } catch (err) {
+      alert(err.message);
     }
   };
 
   return (
-    <>
-      <div className="modal-overlay">
-        <form onSubmit={handleSubmit} className="modal-form">
-          <h2 style={{ textAlign: 'center' }}>Registrar Evento</h2>
+    <div className="modal-overlay">
+      <div className="modal-form">
+        <h3>Crear Evento</h3>
 
-          <input
-            type="text"
-            name="title"
-            placeholder="Título"
-            value={formData.title}
-            onChange={handleChange}
-            style={{ textAlign: 'center' }}
-            required
-          />
+        <label>Título:</label>
+        <input name="titulo" value={formData.titulo} onChange={handleChange} />
 
-          <textarea
-            name="description"
-            placeholder="Descripción"
-            value={formData.description}
-            onChange={handleChange}
-            style={{ textAlign: 'center' }}
-            required
-          />
+        <label>Descripción:</label>
+        <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} />
 
-          <input
-            type="datetime-local"
-            name="beginDate"
-            value={formData.beginDate}
-            onChange={handleChange}
-            style={{ textAlign: 'center' }}
-            required
-          />
+        <label>Fecha y hora:</label>
+        <input type="datetime-local" name="beginDate" value={formData.beginDate} onChange={handleChange} />
 
-          <input
-            type="number"
-            name="duration"
-            placeholder="Duración (minutos)"
-            value={formData.duration}
-            onChange={handleChange}
-            style={{ textAlign: 'center' }}
-            min={1}
-            required
-          />
+        <label>Duración (minutos):</label>
+        <input type="number" name="duration" value={formData.duration} onChange={handleChange} min={1} />
 
-          <input
-            type="text"
-            name="place"
-            placeholder="Lugar"
-            value={formData.place}
-            onChange={handleChange}
-            style={{ textAlign: 'center' }}
-          />
+        <label>Lugar:</label>
+        <input name="place" value={formData.place} onChange={handleChange} />
 
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => setShowTareaModal(true)}
-          >
-            Agregar Tarea
-          </button>
+        <div style={{ marginTop: '10px' }}>
+          {formData.tareaId ? (
+            <p style={{ color: '#0f0' }}>Tarea asociada: ID {formData.tareaId}</p>
+          ) : (
+            <button type="button" onClick={() => setShowCrearTarea(true)}>
+              Asociar Tarea
+            </button>
+          )}
+        </div>
 
-          <button type="submit" className="btn-primary">Guardar</button>
-          <button type="button" className="btn-secondary" onClick={onClose}>Cancelar</button>
-        </form>
+        <div className="modal-botones">
+          <button onClick={handleSubmit}>Guardar</button>
+          <button onClick={onClose}>Cancelar</button>
+        </div>
       </div>
 
-      {showTareaModal && 
+      {showCrearTarea && (
         <CrearTareaModal
-          onClose={() => setShowTareaModal(false)}
-          onCreate={(tarea) => {
-            setFormData(prev => ({ ...prev, tareaId: tarea.id }));
-            setShowTareaModal(false);
+          onClose={() => setShowCrearTarea(false)}
+          onCreated={(tarea) => {
+            setFormData((prev) => ({
+              ...prev,
+              tareaId: tarea.id,
+              deadLine: tarea.deadLine || prev.deadLine,
+            }));
+            setShowCrearTarea(false);
           }}
+          initialDate={formData.beginDate}
         />
-      }
-    </>
+      )}
+    </div>
   );
 };
 

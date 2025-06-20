@@ -1,82 +1,94 @@
 import React from 'react';
+import { usePlanificacion } from '../../../../contexs/PlanificacionContext';
 
-const MostrarInfoModal = ({
-  visible,
-  items = [],
-  day,
-  position = { x: 0, y: 0 },
-  onMouseEnter,
-  onMouseLeave,
-  onEdit,
-  onDelete,
-}) => {
-  if (!visible) return null;
+const MostrarInfoModal = ({ items, tareas: tareasProp, ...props }) => {
+  const { tareas: tareasCtx } = usePlanificacion();
+  const tareas = tareasProp || tareasCtx;
 
-  const objetivos = items.filter(item => item.tipo === 'obketivo');
-  const eventos = items.filter(item => item.tipo === 'evento');
+  const handleCheck = async (id, check) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://localhost:3000/api/goals/${id}/check?check=${check}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data?.error || 'Error al actualizar el objetivo');
+      }
+
+      alert(`Objetivo marcado como ${check ? 'completado' : 'pendiente'}`);
+      props.onSuccess?.();
+    } catch (error) {
+      alert('Error al actualizar: ' + error.message);
+    }
+  };
 
   return (
-    <div
-        id='modal-info'
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        style={{
-            position: 'fixed',
-            top: position.y + 5,
-            left: position.x + 5,
-            backgroundColor: 'white',
-            color: 'black',
-            padding: 20,
-            borderRadius: 8,
-            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
-            maxWidth: 350,
-            maxHeight: '70vh',
-            overflowY: 'auto',
-            zIndex: 10000,
-            pointerEvents: 'auto',
-            fontSize: 14,
-        }
-    }
-    >
-      <h3>Día {day}</h3>
+    <div>
+      {items.map((item, index) => {
+        const tareaId = item.tareaId || item.TareaId || item.tareaID;
+        const tarea = tareas?.find(t => Number(t.id) === Number(tareaId));
 
-      {objetivos.length > 0 && (
-        <div style={{ marginBottom: '1.5rem' }}>
-        <h4 style={{ borderBottom: '1px solid #00bcd4', paddingBottom: '4px' }}>
-          Objetivos
-        </h4>
-        {objetivos.map((o, i) => (
-          <div key={i} style={{ marginBottom: '10px' }}>
-            <strong>{o.titulo}</strong><br />
-            <small>{o.descripcion}</small><br />
-            <button onClick={() => onEdit(o)} style={{ marginRight: '8px' }}>Editar</button>
-            <button onClick={() => onDelete(o)}>Eliminar</button>
-          </div>
-        ))}
-      </div>
-    )}
-
-    {eventos.length > 0 && (
-            <div>
-              <h4 style={{ borderBottom: '1px solid #ff6b6b', paddingBottom: '4px' }}>
-                Eventos
-              </h4>
-              {eventos.map((e, i) => (
-                <div key={i} style={{ marginBottom: '10px' }}>
-                  <strong>{e.titulo}</strong><br />
-                  <small>{e.descripcion}</small><br />
-                  <button onClick={() => onEdit(e)} style={{ marginRight: '8px' }}>Editar</button>
-                  <button onClick={() => onDelete(e)}>Eliminar</button>
-                </div>
-              ))}
+        return (
+          <div
+            key={index}
+            style={{
+              backgroundColor: item.tipo === 'evento' ? '#445' : '#265',
+              padding: '8px',
+              borderRadius: '6px',
+              marginBottom: '6px',
+              opacity: item.tipo === 'objetivo' && item.completado ? 0.6 : 1,
+            }}
+          >
+            <div style={{ fontWeight: 'bold' }}>
+              {item.tipo === 'evento' ? '📅 Evento' : '🎯 Objetivo'}
+              {item.tipo === 'objetivo' && item.completado && (
+                <span style={{ marginLeft: '8px', color: '#0f0' }}>(Completado)</span>
+              )}
             </div>
-          )}
+            <div>{item.titulo}</div>
+            <div style={{ fontSize: '0.85em', color: '#ccc' }}>{item.descripcion}</div>
 
-          {objetivos.length === 0 && eventos.length === 0 && (
-            <p>No hay objetivos ni eventos para este día.</p>
-          )}
-        </div>
-      );
-    };
+            {/* ✅ Mostrar tarea asociada si existe */}
+            {tarea && (
+              <div
+                style={{
+                  marginTop: '6px',
+                  padding: '6px',
+                  backgroundColor: '#111',
+                  borderRadius: '4px',
+                }}
+              >
+                <div style={{ color: '#ffd700', fontWeight: 'bold' }}>🛠 Tarea asociada</div>
+                <div style={{ fontSize: '0.9em', color: '#eee' }}>{tarea.titulo}</div>
+                <div style={{ fontSize: '0.8em', color: '#aaa' }}>{tarea.descripcion}</div>
+              </div>
+            )}
+
+            <div style={{ marginTop: '6px' }}>
+              <button onClick={() => props.onEdit(item)} style={{ marginRight: '5px' }}>Editar</button>
+              <button onClick={() => props.onDelete(item)} style={{ marginRight: '5px' }}>Eliminar</button>
+              {item.tipo === 'objetivo' && !item.completado && (
+                <button onClick={() => handleCheck(item.id, true)} style={{ backgroundColor: 'green', color: 'white' }}>
+                  ✅ Completar
+                </button>
+              )}
+              {item.tipo === 'objetivo' && item.completado && (
+                <button onClick={() => handleCheck(item.id, false)} style={{ backgroundColor: 'gray', color: 'white' }}>
+                  ❌ Desmarcar
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 export default MostrarInfoModal;

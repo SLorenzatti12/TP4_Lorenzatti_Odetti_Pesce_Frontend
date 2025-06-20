@@ -187,26 +187,44 @@ button {
 }
 
 /* Línea azul (objetivo) - un poco más arriba */
-.objetivo::after {
+/* Fondo dorado si tiene tarea */
+.con-tarea {
+  background: linear-gradient(to top right, goldenrod, #fdf5a6);
+  border-radius: 8px;
+}
+
+/* Línea verde (objetivo completado) */
+.objetivo-completado::after {
   content: '';
   position: absolute;
-  bottom: 6px; /* Más arriba que la roja */
+  bottom: 6px;
   left: 15%;
   width: 70%;
   height: 4px;
-  margin-bottom: 2px;
-  background-color: red; /* Azul */
+  background-color: green;
   border-radius: 2px;
 }
 
-/* Línea roja (evento) - justo abajo */
-.evento::before {
+/* Línea roja (objetivo NO completado) */
+.objetivo-pendiente::after {
   content: '';
   position: absolute;
-  bottom: 2px; /* Más cerca del borde inferior */
+  bottom: 6px;
   left: 15%;
   width: 70%;
   height: 4px;
-  background-color: green; /* Rojo */
+  background-color: red;
+  border-radius: 2px;
+}
+
+/* Línea azul (evento) */
+.evento::before {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 15%;
+  width: 70%;
+  height: 4px;
+  background-color: blue;
   border-radius: 2px;
 }

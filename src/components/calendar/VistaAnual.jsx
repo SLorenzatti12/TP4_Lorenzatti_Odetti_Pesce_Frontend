@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useMes } from '../../../contexs/MesContext';
 import '../../styles/calendario_anual.css';
 import IteranteAnual from '../otros/IteranteAnual';
@@ -21,87 +21,91 @@ export const VistaAnual = () => {
 
   const navigate = useNavigate();
 
+  // --- Estados para hover modal ---
   const [hoverModalVisible, setHoverModalVisible] = useState(false);
   const [hoverModalItems, setHoverModalItems] = useState([]);
   const [hoverModalDay, setHoverModalDay] = useState(null);
   const [hoverModalPos, setHoverModalPos] = useState({ x: 0, y: 0 });
-  
+  const hoverModalRef = useRef(null);
   const hoverTimeoutRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
 
-const handleDayHover = (items, dayNumber, e) => {
-  if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-
-  // cálculo de posición...
-  const x = e.clientX + 10;
-  const y = e.clientY + 10;
-
-  setHoverModalItems(items);
-  setHoverModalDay(dayNumber);
-  setHoverModalPos({ x, y });
-  setHoverModalVisible(true);
-  setIsHovering(true);
-};
-
-const handleDayLeave = () => {
-  setIsHovering(false);
-  hoverTimeoutRef.current = setTimeout(() => {
-    if (!isHovering) setHoverModalVisible(false);
-  }, 800);
-};
-
-const handleModalMouseEnter = () => {
-  if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-  setIsHovering(true);
-};
-
-const handleModalMouseLeave = () => {
-  setIsHovering(false);
-  hoverTimeoutRef.current = setTimeout(() => {
-    if (!isHovering) setHoverModalVisible(false);
-  }, 800);
-};
-
-const handleDelete = async (item) => {
-  console.log('Eliminando item:', item);
-  if (!item || !item.tipo || !item.id) {
-    alert('Elemento inválido para eliminar');
-    return;
-  }
-
-  const endpoint = item.tipo === 'evento' ? 'events' : 'goals';
-  const token = localStorage.getItem('token');
-
-  const confirmed = window.confirm(`¿Estás seguro de que querés eliminar este ${item.tipo}?`);
-  if (!confirmed) return;
-
-  try {
-    const response = await fetch(`http://localhost:3000/api/${endpoint}/${item.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data?.error || 'Error desconocido al eliminar');
+  // Ajuste para que el modal no se salga de la pantalla verticalmente
+  useEffect(() => {
+    if (hoverModalVisible && hoverModalRef.current) {
+      const rect = hoverModalRef.current.getBoundingClientRect();
+      const margin = 10;
+      if (rect.bottom > window.innerHeight) {
+        const diff = rect.bottom - window.innerHeight;
+        setHoverModalPos(pos => ({
+          x: pos.x,
+          y: Math.max(margin, pos.y - diff)
+        }));
+      }
     }
+  }, [hoverModalVisible, hoverModalPos]);
 
-    alert(`${item.tipo[0].toUpperCase() + item.tipo.slice(1)} eliminado correctamente`);
-    setHoverModalVisible(false);
+  // Manejo del hover para mostrar modal y posicionarlo
+  const handleDayHover = (items, dayNumber, e) => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setIsHovering(true);
+    setHoverModalItems(items);
+    setHoverModalDay(dayNumber);
+    setHoverModalPos({ x: e.clientX + 10, y: e.clientY + 10 });
+    setHoverModalVisible(true);
+  };
 
-    // Refrescar datos si la función existe
-    if (typeof fetchAll === 'function') {
-      fetchAll();
+  // Manejo de salida del hover del día
+  const handleDayLeave = () => {
+    setIsHovering(false);
+    hoverTimeoutRef.current = setTimeout(() => {
+      if (!isHovering) setHoverModalVisible(false);
+    }, 800);
+  };
+
+  // Manejo de entrada al modal para cancelar timeout
+  const handleModalMouseEnter = () => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setIsHovering(true);
+  };
+
+  // Manejo de salida del modal para iniciar timeout
+  const handleModalMouseLeave = () => {
+    setIsHovering(false);
+    hoverTimeoutRef.current = setTimeout(() => {
+      if (!isHovering) setHoverModalVisible(false);
+    }, 800);
+  };
+
+  const handleDelete = async (item) => {
+    if (!item || !item.tipo || !item.id) {
+      alert('Elemento inválido para eliminar');
+      return;
     }
-  } catch (error) {
-    console.error('Error al eliminar:', error);
-    alert('Error al eliminar: ' + error.message);
-  }
-};
-
+    const endpoint = item.tipo === 'evento' ? 'events' : 'goals';
+    const token = localStorage.getItem('token');
+    const confirmed = window.confirm(`¿Estás seguro de que querés eliminar este ${item.tipo}?`);
+    if (!confirmed) return;
+    try {
+      const response = await fetch(`http://localhost:3000/api/${endpoint}/${item.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data?.error || 'Error desconocido al eliminar');
+      }
+      alert(`${item.tipo[0].toUpperCase() + item.tipo.slice(1)} eliminado correctamente`);
+      setHoverModalVisible(false);
+      if (typeof fetchAll === 'function') fetchAll();
+    } catch (error) {
+      console.error('Error al eliminar:', error);
+      alert('Error al eliminar: ' + error.message);
+    }
+  };
 
   const monthNames = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -122,28 +126,16 @@ const handleDelete = async (item) => {
     const items = [];
 
     objetivos?.forEach(obj => {
-    const fecha = new Date(obj.fecha_limite.split('T')[0] + 'T12:00:00');
-    if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
-      items.push({
-        id: obj.id,
-        day: fecha.getDate(),
-        tipo: 'objetivo',
-        titulo: obj.titulo,
-        descripcion: obj.descripcion
-      });
-    }
-    });
-
-    tareas?.forEach(tarea => {
-      if (!tarea.fecha_limite) return;
-      const fecha = new Date(tarea.fecha_limite.split('T')[0] + 'T12:00:00');
+      const fecha = new Date(obj.fecha_limite.split('T')[0] + 'T12:00:00');
       if (fecha.getFullYear() === selectedYear && fecha.getMonth() === monthIndex) {
         items.push({
-          id: tarea.id,
+          id: obj.id,
           day: fecha.getDate(),
-          tipo: 'tarea',
-          titulo: tarea.titulo,
-          descripcion: tarea.descripcion
+          tipo: 'objetivo',
+          titulo: obj.titulo,
+          descripcion: obj.descripcion,
+          completado: obj.completado,
+          tareaId: obj.TareaId ?? null
         });
       }
     });
@@ -156,14 +148,14 @@ const handleDelete = async (item) => {
           day: fecha.getDate(),
           tipo: 'evento',
           titulo: evento.titulo,
-          descripcion: evento.descripcion
+          descripcion: evento.descripcion,
+          tareaId: evento.tareaID ?? null
         });
       }
     });
 
     return items;
   };
-
 
   const handleSelectOption = (option) => {
     setShowMenu(false);
@@ -259,8 +251,9 @@ const handleDelete = async (item) => {
 
       {/* Modal flotante al pasar el mouse */}
       {hoverModalVisible && (
-      <div
+        <div
           className='modal-hover'
+          ref={hoverModalRef}
           style={{
             position: 'fixed',
             top: hoverModalPos.y,
@@ -279,14 +272,16 @@ const handleDelete = async (item) => {
             visible={hoverModalVisible}
             items={hoverModalItems}
             day={hoverModalDay}
-            position={hoverModalPos}
+            tareas={tareas}            // paso las tareas para que las muestre
             onMouseEnter={handleModalMouseEnter}
             onMouseLeave={handleModalMouseLeave}
             onEdit={(item) => setItemEdicion(item)}
             onDelete={handleDelete}
+            onSuccess={fetchAll}
           />
         </div>
       )}
+
       {itemEdicion && (
         <ModalEdicion
           item={itemEdicion}

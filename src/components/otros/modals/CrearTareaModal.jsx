@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../../../styles/modal.css';
 
-const CrearTareaModal = ({ onClose, onCreated }) => {
+const CrearTareaModal = ({ onClose, onCreated, initialDate = '' }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    deadLine: '',
-    priority: 1
+    deadLine: initialDate,
+    priority: 1,
   });
 
   const handleChange = (e) => {
@@ -66,14 +66,6 @@ const CrearTareaModal = ({ onClose, onCreated }) => {
           name="description"
           placeholder="Descripción"
           value={formData.description}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="date"
-          name="deadLine"
-          value={formData.deadLine}
           onChange={handleChange}
           required
         />

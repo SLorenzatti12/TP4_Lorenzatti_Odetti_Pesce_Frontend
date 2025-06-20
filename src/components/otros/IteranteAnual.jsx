@@ -18,24 +18,45 @@ export function IteranteAnual({ day, cant, elementos = [], onDayHover, onDayLeav
       {Array.from({ length: cant }, (_, i) => {
         const dayNumber = i + 1;
         const positionClass = getPosition();
+
         const itemsToday = elementos.filter(e => e.day === dayNumber);
 
-        const tipos = [...new Set(itemsToday.map(e => e.tipo))];
+        const tieneTarea = itemsToday.some(e => e.tareaId != null || e.TareaID != null);
+
+        const objetivosPendientes = itemsToday.filter(e => e.tipo === 'objetivo' && !e.completado);
+        const objetivosCompletados = itemsToday.filter(e => e.tipo === 'objetivo' && e.completado);
+        const eventos = itemsToday.filter(e => e.tipo === 'evento');
+
+        const tienePendientes = objetivosPendientes.length > 0;
+        const tieneCompletados = objetivosCompletados.length > 0;
+        const tieneEventos = eventos.length > 0;
 
         let tipoClass = '';
-        if (tipos.includes('objetivo') && tipos.includes('evento')) {
-          tipoClass = 'objetivo_evento';
-        } else if (tipos.includes('objetivo')) {
-          tipoClass = 'solo_objetivo';
-        } else if (tipos.includes('evento')) {
+
+        if (tienePendientes && tieneCompletados && tieneEventos) {
+          tipoClass = 'objetivo_pendiente_completado_evento';
+        } else if (tienePendientes && tieneCompletados) {
+          tipoClass = 'objetivo_pendiente_completado';
+        } else if (tienePendientes && tieneEventos) {
+          tipoClass = 'objetivo_pendiente_evento';
+        } else if (tieneCompletados && tieneEventos) {
+          tipoClass = 'objetivo_completado_evento';
+        } else if (tienePendientes) {
+          tipoClass = 'objetivo_pendiente';
+        } else if (tieneCompletados) {
+          tipoClass = 'objetivo_completado';
+        } else if (tieneEventos) {
           tipoClass = 'solo_evento';
         }
+
+        const textoClase = tieneTarea ? 'tiene_tarea' : '';
 
         const classes = [
           positionClass,
           itemsToday.length ? 'tiene_popup_anual' : '',
-          tipoClass
-        ].join(' ');
+          tipoClass,
+          textoClase
+        ].join(' ').trim();
 
         return (
           <span

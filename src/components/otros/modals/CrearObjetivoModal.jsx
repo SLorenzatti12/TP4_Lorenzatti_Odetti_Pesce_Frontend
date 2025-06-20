@@ -8,6 +8,7 @@ const CrearObjetivoModal = ({ onClose, onCreated, initialDate = '' }) => {
     title: '',
     description: '',
     deadLine: initialDate,
+    tareaId: null,
   });
 
   const [showTareaModal, setShowTareaModal] = useState(false);
@@ -32,6 +33,7 @@ const CrearObjetivoModal = ({ onClose, onCreated, initialDate = '' }) => {
           title: formData.title,
           description: formData.description,
           deadLine: formData.deadLine,
+          tareaId: formData.tareaId,
         },
         {
           headers: {
@@ -42,8 +44,10 @@ const CrearObjetivoModal = ({ onClose, onCreated, initialDate = '' }) => {
 
       console.log('Objetivo creado:', response.data);
       onClose();
+      onCreated?.();
     } catch (error) {
       console.error('Error al crear objetivo:', error.response?.data || error.message);
+      alert('Error: ' + JSON.stringify(error.response?.data));
     }
   };
 
@@ -52,55 +56,68 @@ const CrearObjetivoModal = ({ onClose, onCreated, initialDate = '' }) => {
       <div className="modal-overlay">
         <form onSubmit={handleSubmit} className="modal-form">
           <h2 style={{ textAlign: 'center' }}>Registrar Objetivo</h2>
+
           <input
             type="text"
             name="title"
             placeholder="Título"
             value={formData.title}
-            style={{ textAlign: 'center' }}
             onChange={handleChange}
+            required
           />
+
           <textarea
             name="description"
             placeholder="Descripción"
             value={formData.description}
-            style={{ textAlign: 'center' }}
             onChange={handleChange}
+            required
           />
+
           <input
             type="date"
             name="deadLine"
             value={formData.deadLine}
-            style={{ textAlign: 'center' }}
             onChange={handleChange}
+            required
           />
-          <button type="submit" className="btn-primary">
-            Guardar
-          </button>
 
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => setShowTareaModal(true)}
-          >
-            Agregar Tarea
-          </button>
+          {/* ✅ Mostrar tarea asociada o botón para agregar */}
+          <div style={{ marginTop: '10px' }}>
+            {formData.tareaId ? (
+              <p style={{ color: '#0f0' }}>Tarea asociada: ID {formData.tareaId}</p>
+            ) : (
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setShowTareaModal(true)}
+              >
+                + Asociar Tarea
+              </button>
+            )}
+          </div>
 
-          <button type="button" className="btn-secondary" onClick={onClose} style={{ marginLeft: '10px' }}>
-            Cancelar
-          </button>
+          <div className="modal-botones" style={{ marginTop: '10px' }}>
+            <button type="submit" className="btn-primary">Guardar</button>
+            <button type="button" className="btn-secondary" onClick={onClose}>Cancelar</button>
+          </div>
         </form>
       </div>
-      
-      {showTareaModal && 
+
+      {showTareaModal && (
         <CrearTareaModal
           onClose={() => setShowTareaModal(false)}
-          onCreate={(tarea) => {
-            setFormData(prev => ({ ...prev, tareaId: tarea.id }));
+          onCreated={(tarea) => {
+            setFormData(prev => ({
+              ...prev,
+              tareaId: tarea.id,
+              deadLine: tarea.deadLine || prev.deadLine
+            }));
             setShowTareaModal(false);
           }}
+          initialDate={formData.deadLine}
         />
-      }
+      )}
     </>
   );
 };

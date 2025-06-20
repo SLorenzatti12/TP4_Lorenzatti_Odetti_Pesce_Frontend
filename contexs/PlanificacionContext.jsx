@@ -28,6 +28,7 @@ export const PlanificacionProvider = ({ children }) => {
       setTareas(taRes.data);
       setRecordatorios(reRes.data);
       setCategorias(caRes.data);
+      console.log(eventos);
     } catch (error) {
       console.error('Error cargando datos:', error);
     }
