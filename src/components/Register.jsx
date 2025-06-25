@@ -24,20 +24,18 @@ function Register() {
         nombre: username,
         email,
         contraseña: password
-  });
+      });
 
-    console.log(res.data); // { mensaje, id }
-
-    setError('');
-    navigate('/'); // Redirige al login
-  } catch (err) {
-    if (err.response) {
-      setError(err.response.data.error || 'Error al registrar usuario');
-    } else {
-      setError('Error de red');
+      setError('');
+      navigate('/'); // Redirige al login
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.error || 'Error al registrar usuario');
+      } else {
+        setError('Error de red');
+      }
     }
-  }
-};
+  };
 
   return (
     <>
