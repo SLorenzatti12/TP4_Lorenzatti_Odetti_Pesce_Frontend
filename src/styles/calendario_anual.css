@@ -1,0 +1,166 @@
+.mini-tooltip {
+  position: absolute;
+  top: 28px; /* justo debajo del día */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  z-index: 100;
+  width: 200px;
+  font-size: 0.8rem;
+  pointer-events: auto;
+  user-select: text;
+}
+
+.mini-tooltip-item + .mini-tooltip-item {
+  margin-top: 6px;
+  border-top: 1px solid #444;
+  padding-top: 6px;
+}
+
+.calendario_anual {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.mes {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+.nombre_mes {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+.dias_semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.dias_semana span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  padding: 0.4rem;
+  color: #2d3436;
+  text-align: center;
+  position: relative;
+  border-radius: 17.5%;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.lu { aspect-ratio: 1/1; grid-column: 1; }
+.ma { aspect-ratio: 1/1; grid-column: 2; }
+.mi { aspect-ratio: 1/1; grid-column: 3; }
+.ju { aspect-ratio: 1/1; grid-column: 4; }
+.vi { aspect-ratio: 1/1; grid-column: 5; }
+.sa { aspect-ratio: 1/1; grid-column: 6; }
+.do { aspect-ratio: 1/1; grid-column: 7; }
+
+.tiene_popup_anual {
+  position: relative;
+  z-index: 0;
+}
+
+.tiene_popup_anual::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.25;
+}
+
+/* 🔴 Objetivo pendiente */
+.tiene_popup_anual.objetivo_pendiente::after {
+  background-color: rgba(255, 40, 40, 0.6);
+  border: 2px solid rgba(255, 40, 40, 1);
+}
+
+/* 🟢 Objetivo completado */
+.tiene_popup_anual.objetivo_completado::after {
+  background-color: rgba(60, 220, 120, 0.6);
+  border: 2px solid rgba(60, 220, 120, 1);
+  opacity: 1;
+}
+
+/* 🟡 Tarea asociada (color texto) */
+.tiene_popup_anual.tiene_tarea {
+  color: yellow; /* amarillo dorado */
+  font-weight: 600;
+  text-shadow: 0 0 3px #b38600;
+}
+
+.tiene_popup_anual.solo_evento::after {
+  background-color: blue;
+  box-shadow: 0 0 6px blue;
+}
+
+/* Objetivo pendiente + evento */
+.tiene_popup_anual.objetivo_pendiente_evento::after {
+  background: linear-gradient(135deg, rgba(255, 40, 40, 0.8), rgba(40, 100, 255, 0.8));
+  box-shadow: 0 0 8px rgba(255, 40, 40, 0.9), 0 0 8px rgba(40, 100, 255, 0.9);
+  border-color: transparent;
+}
+
+/* Objetivo completado + evento */
+.tiene_popup_anual.objetivo_completado_evento::after {
+  background: linear-gradient(135deg, rgba(30, 200, 70, 0.8), rgba(40, 100, 255, 0.8));
+  box-shadow: 0 0 8px rgba(30, 200, 70, 1), 0 0 8px rgba(40, 100, 255, 0.9);
+  border-color: transparent;
+}
+
+/* Objetivo pendiente + objetivo completado */
+.tiene_popup_anual.objetivo_pendiente_completado::after {
+  background: linear-gradient(135deg, rgba(255, 40, 40, 0.8), rgba(30, 200, 70, 0.8));
+  box-shadow: 0 0 8px rgba(255, 40, 40, 0.9), 0 0 8px rgba(30, 200, 70, 1);
+  border-color: transparent;
+}
+
+/* Objetivo pendiente + objetivo completado + evento */
+.tiene_popup_anual.objetivo_pendiente_completado_evento::after {
+  background: linear-gradient(135deg, rgba(255, 40, 40, 0.8), rgba(30, 200, 70, 0.8), rgba(40, 100, 255, 0.8));
+  box-shadow: 0 0 8px rgba(255, 40, 40, 0.9), 0 0 8px rgba(30, 200, 70, 1), 0 0 8px rgba(40, 100, 255, 0.9);
+  border-color: transparent;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .calendario_anual {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .calendario_anual {
+    grid-template-columns: 1fr;
+  }
+}

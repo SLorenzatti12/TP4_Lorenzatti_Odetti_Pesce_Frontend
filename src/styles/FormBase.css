@@ -1,0 +1,212 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Poppins', 'Inter', Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #18192a;
+  overflow-x: hidden;
+  padding-top: 90px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: #18192a;  
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a34b9;  
+  border-radius: 8px;
+  border: 2px solid #18192a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a48e6; 
+}
+
+.barra-header-agenda {
+  width: 100vw;
+  min-height: 76px;
+  background: #23223b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 16px #19172415;
+  padding: 0 2.6rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+
+.logo-header {
+  width: 60px;
+  height: 60px;
+}
+
+.titulo-header {
+  font-family: 'Bebas Neue', 'Inter', Arial, sans-serif;
+  font-size: 3.3rem;
+  color: #f3f3ff;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 0.6rem;
+}
+
+@media (max-width: 600px) {
+  .barra-header-agenda {
+    min-height: 80px;
+    padding: 0 1rem;
+    gap: 0.7rem;
+  }
+  .logo-header {
+    width: 50px;
+    height: 50px;
+  }
+  .titulo-header {
+    font-size: 2.5rem;
+    margin-left: 0.4rem;
+    letter-spacing: 2px;
+  }
+}
+
+.form-container {
+  background: rgba(34, 34, 51, 0.94);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 370px;  
+  min-width: 250px;  
+  margin: 2rem auto;
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-container h2 {
+  margin-bottom: 1.3rem;
+  color: #eee;
+  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 2.1rem;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.15;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 430px) {
+  .form-container {
+    max-width: 98vw;
+    padding: 1.2rem 0.7rem;
+  }
+  .form-container h2 {
+    font-size: 1.3rem;
+    padding: 0 0.3rem;
+  }
+}
+
+.form-container label {
+  width: 100%;
+  margin-bottom: 0.6rem;
+  color: #bcbaff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.form-container input {
+  width: 100%;
+  padding: 0.68rem;
+  margin-bottom: 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: #171721;
+  color: #e0e0e0;
+  font-size: 1rem;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.form-container input:focus {
+  outline: none;
+  background: #38385e;
+  box-shadow: 0 0 6px #9b5de5aa;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(90deg, #9b5de5, #3f37c9);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.07rem;
+  cursor: pointer;
+  box-shadow: 0 1px 5px #16162260;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.form-container button:hover {
+  background: linear-gradient(90deg, #7447ab, #302a9a);
+  transform: translateY(-1px) scale(1.03);
+}
+
+.form-container .error {
+  color: #ff7171;
+  background: #22223280;
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin-bottom: 0.8rem;
+  width: 100%;
+  text-align: center;
+  font-size: 0.97rem;
+}
+
+.form-container .registro-btn {
+  background: none;
+  color: #bcbaff;
+  border: 1px solid #39396c;
+  margin-top: 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.form-container .registro-btn:hover {
+  background: #3f37c9;
+  color: #fff;
+  border: 1px solid #3f37c9;
+}
+
+#bg-espiral {
+  position: fixed;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  width: 450vw; 
+  height: 450vh;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at 25% 20%,
+    #565281 0%,
+    #cbb8fd 15%,
+    #9f81f2 32%,
+    #312b9d 53%,
+    #2b2783 90%,
+    #18192a 100%
+  );
+  filter: blur(60px); 
+  opacity: 0.88;
+  animation: girarGradiente 34s linear infinite;
+}
+@keyframes girarGradiente {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
