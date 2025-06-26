@@ -165,71 +165,85 @@ export const VistaAnual = () => {
 
   return (
     <>
-      <div className="barra" style={{ position: 'relative' }}>
-        <select
-          value={selectedYear}
-          className="selector-del-mes"
-          onChange={(e) => setSelectedYear(Number(e.target.value))}
+<div className="anio-selector-bar">
+  <select
+    value={selectedYear}
+    className="anio-select"
+    onChange={(e) => setSelectedYear(Number(e.target.value))}
+  >
+    {Array.from({ length: 5 }, (_, i) => {
+      const yearOption = currentYear - 2 + i;
+      return (
+        <option key={yearOption} value={yearOption}>
+          {yearOption}
+        </option>
+      );
+    })}
+  </select>
+
+    <div className="anio-bar-spacer"></div> 
+
+  <div style={{ display: 'inline-block', position: 'relative' }}>
+    <button className="boton-plus" onClick={() => setShowMenu(!showMenu)} title="Agregar">
+      <span style={{ fontSize: "1.5rem", lineHeight: "1" }}>+</span>
+    </button>
+    {showMenu && (
+      <div
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: '110%',
+          backgroundColor: '#222',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(80,50,160,0.16)',
+          zIndex: 1000,
+          minWidth: '180px',
+          overflow: "hidden"
+        }}
+      >
+        <button
+          onClick={() => handleSelectOption('objetivo')}
+          style={{
+            width: '100%',
+            padding: '12px 18px',
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            textAlign: 'left',
+            fontWeight: 500,
+            fontSize: "1rem",
+            borderBottom: "1px solid #35336a",
+            transition: "background 0.17s"
+          }}
+          onMouseOver={e => e.currentTarget.style.background='#3f37c950'}
+          onMouseOut={e => e.currentTarget.style.background='none'}
         >
-          {Array.from({ length: 5 }, (_, i) => {
-            const yearOption = currentYear - 2 + i;
-            return (
-              <option key={yearOption} value={yearOption}>
-                {yearOption}
-              </option>
-            );
-          })}
-        </select>
-
-        {/* Botón + que abre menú */}
-        <div style={{ display: 'inline-block', position: 'relative' }}>
-          <button className="btn btn-success boton-control" onClick={() => setShowMenu(!showMenu)}>+</button>
-
-          {showMenu && (
-            <div
-              style={{
-                position: 'absolute',
-                right: 0,
-                top: '110%',
-                backgroundColor: '#222',
-                borderRadius: '6px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                zIndex: 1000,
-                minWidth: '140px',
-              }}
-            >
-              <button
-                onClick={() => handleSelectOption('objetivo')}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                }}
-              >
-                Crear Objetivo
-              </button>
-              <button
-                onClick={() => handleSelectOption('evento')}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                }}
-              >
-                Crear Evento
-              </button>
-            </div>
-          )}
-        </div>
+          🎯 Crear Objetivo
+        </button>
+        <button
+          onClick={() => handleSelectOption('evento')}
+          style={{
+            width: '100%',
+            padding: '12px 18px',
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            textAlign: 'left',
+            fontWeight: 500,
+            fontSize: "1.05rem",
+            transition: "background 0.17s"
+          }}
+          onMouseOver={e => e.currentTarget.style.background='#3f37c950'}
+          onMouseOut={e => e.currentTarget.style.background='none'}
+        >
+          📅 Crear Evento
+        </button>
       </div>
+    )}
+  </div>
+</div>
 
       <div className="calendario_anual">
         {monthNames.map((month, index) => (

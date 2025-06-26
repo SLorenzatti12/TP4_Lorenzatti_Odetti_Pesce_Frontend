@@ -1,0 +1,75 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #1e1e2f;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.dashboard-nav {
+  display: flex;
+  justify-content: center;
+  gap: 2.3rem;
+  padding: 1.3rem 0 0.8rem 0;
+  background-color: #23223bde;
+  border-bottom: 1px solid #444;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dashboard-main {
+  flex-grow: 1;
+  padding: 2rem 2rem 2rem 2rem;
+  background-color: #1e1e2f;
+  /* NUNCA uses margin-top acá */
+  min-height: 0; /* importante para sticky! */
+  /* NO poner overflow-y acá para que el scroll general sea el de la página */
+}
+
+@media (max-width: 900px) {
+  .dashboard-main {
+    padding: 1rem;
+  }
+}
+
+.nav-link {
+  color: #bbb;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.18rem;
+  position: relative;
+  padding: 0.45rem 0.8rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: color 0.17s;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.13rem;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg,#00bcd4,#9b5de5 80%);
+  border-radius: 3px;
+  transition: all 0.32s cubic-bezier(.75,0,.25,1);
+  transform: translateX(-50%);
+  opacity: 0.6;
+}
+
+.nav-link:hover {
+  color: #9b5de5;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 92%;
+}
+
+.nav-link.active {
+  color: #00bcd4;
+  font-weight: 700;
+}
